@@ -11,7 +11,7 @@
 ---
 
   <a href="плейсхолдер ио" title="Посмотреть полное описание функций">
-    <img src="https://i.imgur.com/ССЫЛКА_НА_КНОПКУ_ДЛЯ_C2.png" alt="Посмотреть полное описание" width="450">
+    <img src="https://github.com/user-attachments/assets/6d776bc8-aa57-446e-86d7-8843e2f715d4" alt="Посмотреть полное описание" width="450">
   </a>
 
 ---
