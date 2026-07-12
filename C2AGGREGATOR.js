@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         C2: AGGREGATOR
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.01
 // @description  Агрегатор мероприятий и фестивалей для Cosplay2
 // @author       Egarchik
 // @license      MIT
@@ -85,10 +85,10 @@
 
     const globalStyle = document.createElement('style');
     globalStyle.textContent = `
-        #page-content.c2-agg-active #maincontainer { display: none !important; }
-        #page-content.c2-agg-active .ad { display: none !important; }
-        #page-content.c2-agg-active #yandex_rtb_R-A-16355720-7 { display: none !important; }
-        #c2-aggregator-root { opacity: 0; transform: translateY(-20px); transition: opacity 0.4s ease-out, transform 0.4s ease-out; }
+        body.c2-agg-active #maincontainer { display: none !important; }
+        body.c2-agg-active .ad, body.c2-agg-active [id^="yandex_rtb_"] { display: none !important; }
+        body.c2-agg-active > .container, body.c2-agg-active > br { display: none !important; }
+        #c2-aggregator-root { opacity: 0; transform: translateY(-20px); transition: opacity 0.4s ease-out, transform 0.4s ease-out; position: relative; z-index: 9999; }
         #c2-aggregator-root.open { opacity: 1; transform: translateY(0); }
         #slide-nav .nav li a#nav-c2-agg-btn { transition: background-color 0.2s; }
         #slide-nav .nav li a#nav-c2-agg-btn.active, #slide-nav .nav li a#nav-c2-agg-btn:hover { background-color: #1b59bd !important; color: #ffffff !important; }
@@ -109,10 +109,10 @@
         if (host.classList.contains('open')) {
             host.classList.remove('open');
             if (navBtn) navBtn.classList.remove('active');
-            setTimeout(() => { host.style.display = 'none'; pageContent.classList.remove('c2-agg-active'); }, 400);
+            setTimeout(() => { host.style.display = 'none'; document.body.classList.remove('c2-agg-active');; }, 400);
         } else {
             host.style.display = 'block';
-            pageContent.classList.add('c2-agg-active');
+            document.body.classList.add('c2-agg-active');
             if (navBtn) navBtn.classList.add('active');
             if (!isDataLoaded) preloadData();
             requestAnimationFrame(() => host.classList.add('open'));
@@ -126,7 +126,8 @@
         host = document.createElement('div');
         host.id = 'c2-aggregator-root';
         host.style.display = 'none';
-        pageContent.insertBefore(host, pageContent.firstChild);
+        const navMenu = document.querySelector('div[ng-controller="menu.Ctrl"]');
+        navMenu ? navMenu.insertAdjacentElement('afterend', host) : pageContent.insertBefore(host, pageContent.firstChild);
         shadow = host.attachShadow({ mode: 'open' });
 
         const style = document.createElement('style');
